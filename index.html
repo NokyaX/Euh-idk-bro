@@ -76,6 +76,7 @@ button:hover {
   padding: 15px 40px;
   font-size: 20px;
   transition: transform 0.3s ease;
+  z-index: 1;
 }
 
 .yes:hover {
@@ -85,7 +86,6 @@ button:hover {
 .no {
   background-color: #ccc;
   color: #666;
-  position: fixed;
   transition: left 0.4s ease, top 0.4s ease, background-color 0.3s ease, color 0.3s ease;
 }
 
@@ -142,12 +142,6 @@ button:hover {
   50% { transform: scale(1.1); }
   100% { opacity: 1; transform: scale(1) translateY(0); }
 }
-
-@media (max-width: 600px) {
-  .container { padding: 40px 20px; }
-  h1 { font-size: 1.8em; }
-  button { padding: 12px 25px; font-size: 16px; }
-}
 </style>
 </head>
 <body>
@@ -176,14 +170,7 @@ button:hover {
 
 <script>
 let noButtonClicks = 0;
-
-// Set initial position for smooth movement
-window.onload = function() {
-  const noBtn = document.getElementById("noBtn");
-  const rect = noBtn.getBoundingClientRect();
-  noBtn.style.left = rect.left + "px";
-  noBtn.style.top = rect.top + "px";
-};
+let fixedActivated = false;
 
 function showLetter() {
   const letter = document.getElementById("letter");
@@ -206,30 +193,24 @@ function moveButton() {
   const noBtn = document.getElementById("noBtn");
   noButtonClicks++;
 
-  // YES button grows
+  // Grow YES button
   const yesBtn = document.querySelector(".yes");
   yesBtn.style.transform = `scale(${1 + noButtonClicks * 0.1})`;
+
+  // First click: convert to fixed without jumping
+  if (!fixedActivated) {
+    const rect = noBtn.getBoundingClientRect();
+    noBtn.style.position = "fixed";
+    noBtn.style.left = rect.left + "px";
+    noBtn.style.top = rect.top + "px";
+    fixedActivated = true;
+  }
 
   const randomX = Math.random() * (window.innerWidth - noBtn.offsetWidth);
   const randomY = Math.random() * (window.innerHeight - noBtn.offsetHeight);
 
   noBtn.style.left = randomX + "px";
   noBtn.style.top = randomY + "px";
-
-  const messages = [
-    "Are you sure?",
-    "Really? 😭",
-    "Well you didnt mean to press that",
-    "You sure about that? 😞",
-    "Come on! 🙏",
-    "I'll do anything just click yes"
-  ];
-
-  if (noButtonClicks <= messages.length) {
-    alert(messages[noButtonClicks - 1]);
-  } else {
-    alert("I'll be a good boy 😔 click on yes");
-  }
 }
 
 function createConfetti() {
