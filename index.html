@@ -30,14 +30,8 @@ body {
 }
 
 @keyframes slideIn {
-  from {
-    opacity: 0;
-    transform: translateY(-30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(-30px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 h1 {
@@ -68,7 +62,6 @@ button {
   border-radius: 50px;
   cursor: pointer;
   font-weight: bold;
-  transition: all 0.3s ease;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
@@ -82,7 +75,7 @@ button:hover {
   color: white;
   padding: 15px 40px;
   font-size: 20px;
-  transition: transform 0.3s ease; /* Smooth growing */
+  transition: transform 0.3s ease;
 }
 
 .yes:hover {
@@ -92,6 +85,8 @@ button:hover {
 .no {
   background-color: #ccc;
   color: #666;
+  position: fixed;
+  transition: left 0.4s ease, top 0.4s ease, background-color 0.3s ease, color 0.3s ease;
 }
 
 .no:hover {
@@ -182,6 +177,14 @@ button:hover {
 <script>
 let noButtonClicks = 0;
 
+// Set initial position for smooth movement
+window.onload = function() {
+  const noBtn = document.getElementById("noBtn");
+  const rect = noBtn.getBoundingClientRect();
+  noBtn.style.left = rect.left + "px";
+  noBtn.style.top = rect.top + "px";
+};
+
 function showLetter() {
   const letter = document.getElementById("letter");
   const successMessage = document.getElementById("successMessage");
@@ -203,14 +206,13 @@ function moveButton() {
   const noBtn = document.getElementById("noBtn");
   noButtonClicks++;
 
-  // 🔥 YES button grows each time NO is clicked
+  // YES button grows
   const yesBtn = document.querySelector(".yes");
   yesBtn.style.transform = `scale(${1 + noButtonClicks * 0.1})`;
 
-  const randomX = Math.random() * (window.innerWidth - 100);
-  const randomY = Math.random() * (window.innerHeight - 100);
+  const randomX = Math.random() * (window.innerWidth - noBtn.offsetWidth);
+  const randomY = Math.random() * (window.innerHeight - noBtn.offsetHeight);
 
-  noBtn.style.position = "fixed";
   noBtn.style.left = randomX + "px";
   noBtn.style.top = randomY + "px";
 
@@ -242,7 +244,6 @@ function createConfetti() {
       confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
       confetti.style.animation = `fall ${2 + Math.random() * 1}s linear`;
       document.body.appendChild(confetti);
-
       setTimeout(() => confetti.remove(), 3000);
     }, i * 30);
   }
