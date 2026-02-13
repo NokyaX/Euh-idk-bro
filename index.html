@@ -27,6 +27,7 @@ body {
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
   max-width: 600px;
   animation: slideIn 0.8s ease-out;
+  position: relative;
 }
 
 @keyframes slideIn {
@@ -79,10 +80,6 @@ button:hover {
   z-index: 1;
 }
 
-.yes:hover {
-  background: linear-gradient(135deg, #ff1493 0%, #c70070 100%);
-}
-
 .no {
   background-color: #ccc;
   color: #666;
@@ -92,6 +89,26 @@ button:hover {
 .no:hover {
   background-color: #999;
   color: white;
+}
+
+/* 💬 Speech Bubble */
+#speechBubble {
+  position: fixed;
+  background: #ff4d88;
+  color: white;
+  padding: 10px 18px;
+  border-radius: 20px;
+  font-size: 14px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  transform: translateY(10px);
+  z-index: 999;
+}
+
+#speechBubble.show {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 #letter {
@@ -168,22 +185,40 @@ button:hover {
   </div>
 </div>
 
+<div id="speechBubble"></div>
+
 <script>
 let noButtonClicks = 0;
 let fixedActivated = false;
 
-function showLetter() {
-  const letter = document.getElementById("letter");
-  const successMessage = document.getElementById("successMessage");
-  const buttonContainer = document.querySelector(".button-container");
-  const heading = document.querySelector("h1");
+const messages = [
+  "Are you sure?",
+  "Really? 😭",
+  "You didn't mean to press that...",
+  "You sure about that? 😞",
+  "Come on! 🙏",
+  "I'll do anything just click yes"
+];
 
-  heading.style.display = "none";
-  buttonContainer.style.display = "none";
-  letter.style.display = "block";
+function showSpeechBubble(text, x, y) {
+  const bubble = document.getElementById("speechBubble");
+  bubble.textContent = text;
+  bubble.style.left = x + "px";
+  bubble.style.top = y - 40 + "px";
+  bubble.classList.add("show");
 
   setTimeout(() => {
-    successMessage.style.display = "block";
+    bubble.classList.remove("show");
+  }, 1500);
+}
+
+function showLetter() {
+  document.querySelector("h1").style.display = "none";
+  document.querySelector(".button-container").style.display = "none";
+  document.getElementById("letter").style.display = "block";
+
+  setTimeout(() => {
+    document.getElementById("successMessage").style.display = "block";
   }, 500);
 
   createConfetti();
@@ -193,11 +228,9 @@ function moveButton() {
   const noBtn = document.getElementById("noBtn");
   noButtonClicks++;
 
-  // Grow YES button
   const yesBtn = document.querySelector(".yes");
   yesBtn.style.transform = `scale(${1 + noButtonClicks * 0.1})`;
 
-  // First click: convert to fixed without jumping
   if (!fixedActivated) {
     const rect = noBtn.getBoundingClientRect();
     noBtn.style.position = "fixed";
@@ -211,19 +244,23 @@ function moveButton() {
 
   noBtn.style.left = randomX + "px";
   noBtn.style.top = randomY + "px";
+
+  const message = noButtonClicks <= messages.length
+    ? messages[noButtonClicks - 1]
+    : "I'll be a good boy 😔 click on yes";
+
+  showSpeechBubble(message, randomX, randomY);
 }
 
 function createConfetti() {
   const colors = ['#ff4d88', '#ff69b4', '#ffb6c1', '#ffc0cb', '#ff1493', '#fff'];
-  const confettiPieces = 50;
-
-  for (let i = 0; i < confettiPieces; i++) {
+  for (let i = 0; i < 50; i++) {
     setTimeout(() => {
       const confetti = document.createElement('div');
       confetti.classList.add('confetti');
       confetti.style.left = Math.random() * 100 + '%';
       confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-      confetti.style.animation = `fall ${2 + Math.random() * 1}s linear`;
+      confetti.style.animation = `fall ${2 + Math.random()}s linear`;
       document.body.appendChild(confetti);
       setTimeout(() => confetti.remove(), 3000);
     }, i * 30);
@@ -232,13 +269,12 @@ function createConfetti() {
 
 const style = document.createElement('style');
 style.textContent = `
-  @keyframes fall {
-    to {
-      transform: translateY(100vh) rotate(720deg);
-      opacity: 0;
-    }
+@keyframes fall {
+  to {
+    transform: translateY(100vh) rotate(720deg);
+    opacity: 0;
   }
-`;
+}`;
 document.head.appendChild(style);
 </script>
 
