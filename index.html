@@ -2,6 +2,9 @@
 <html>
 <head>
 <title>Be My Valentine?</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <style>
 * {
   margin: 0;
@@ -27,6 +30,11 @@ body {
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
   max-width: 600px;
   animation: slideIn 0.8s ease-out;
+}
+
+body.popup-active .container {
+  filter: blur(3px);
+  transition: filter 0.3s ease;
 }
 
 @keyframes slideIn {
@@ -56,8 +64,8 @@ h1 {
 }
 
 button {
-  padding: 15px 30px;
-  font-size: 18px;
+  padding: 18px 35px;
+  font-size: 20px;
   border: none;
   border-radius: 50px;
   cursor: pointer;
@@ -81,7 +89,7 @@ button:hover {
 .no {
   background-color: #ccc;
   color: #666;
-  transition: left 0.4s ease, top 0.4s ease;
+  transition: left 0.6s ease, top 0.6s ease;
 }
 
 .no:hover {
@@ -105,6 +113,9 @@ button:hover {
   opacity: 0;
   transition: all 0.4s ease;
   z-index: 1000;
+  text-align: center;
+  width: 80%;
+  max-width: 320px;
 }
 
 #popup.show {
@@ -160,6 +171,27 @@ button:hover {
   50% { transform: scale(1.1); }
   100% { opacity: 1; transform: scale(1) translateY(0); }
 }
+
+/* Mobile Specific */
+@media (max-width: 600px) {
+  .container {
+    padding: 40px 20px;
+  }
+  
+  h1 {
+    font-size: 1.8em;
+  }
+  
+  .button-container {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  button {
+    width: 100%;
+    max-width: 280px;
+  }
+}
 </style>
 </head>
 <body>
@@ -205,10 +237,12 @@ function showPopup(text) {
   const popup = document.getElementById("popup");
   popup.textContent = text;
   popup.classList.add("show");
+  document.body.classList.add("popup-active");
 
   setTimeout(() => {
     popup.classList.remove("show");
-  }, 2000); // slower, smoother
+    document.body.classList.remove("popup-active");
+  }, 2200);
 }
 
 function showLetter() {
