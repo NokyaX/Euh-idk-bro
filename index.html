@@ -192,24 +192,25 @@ button:hover {
 <body>
 
 <div class="container">
-  <h1>Charlotte, will you be my Valentine? 🤍</h1>
+  <h1>Charlotte, budeš moje Valentýnka? 🤍</h1>
 
   <div class="button-container">
-    <button class="yes" onclick="showLetter()">YES 💕</button>
-    <button class="no" id="noBtn" onclick="moveButton()">NO 😔</button>
+    <button class="yes" onclick="showLetter()">ANO 💕</button>
+    <button class="no" id="noBtn" onclick="moveButton()">NE 😔</button>
   </div>
 
   <div id="successMessage">
-    ✨ You made me the happiest! 💕 ✨
+    ✨ Udělala jsi mě nejšťastnějším! 💕 ✨
   </div>
 
   <div id="letter">
-    <p>Hi Charlotte,</p>
-    <p>When we started talking, I didn't expect anything, but then you came into my life and changed everything. 💫</p>
-    <p>Every conversation with you feels special. Your laugh, your kindness, and the way you see the world inspires me daily.</p>
-    <p>Life is more colorful with you in it, and I want to spend more moments making you smile like you make me smile.</p>
-    <p>Will you be my Valentine and let me show you just how much you mean to me? 🌹</p>
-    <p>Forever yours,<br>Your Secret Admirer 💌</p>
+    <p>Ahoj Charlotte,</p>
+    <p>dnes je Valentýn a říkal jsem ti, že něco připravuju, tak tady to je.</p>
+    <p>Když jsme si začali psát, nic jsem od toho nečekal. Ale postupem času se něco změnilo. Čím víc jsme si povídali, tím víc mi na tobě začalo záležet.</p>
+    <p>Opravdu si vážím momentů, které jsme spolu měli. Tvého hlasu, tvého smíchu, toho, jak se staráš. Moje sociální baterka se většinou vybije docela rychle, ale s tebou ne. I když jen mlčíme, je to příjemné. A to je pro mě vzácné.</p>
+    <p>Nevím přesně, kam to povede, ale vím, že od té doby, co si píšu s tebou, je můj život světlejší. A tvoje přítomnost v mém životě mě upřímně motivuje být lepším člověkem.</p>
+    <p>Doufám, že se mnou cítíš to samé.</p>
+    <p>Tak… budeš moje Valentýnka? 🤍</p>
   </div>
 </div>
 
@@ -221,18 +222,13 @@ function showLetter() {
   const successMessage = document.getElementById("successMessage");
   const buttonContainer = document.querySelector(".button-container");
   
-  // Hide buttons
   buttonContainer.style.display = "none";
-  
-  // Show letter with animation
   letter.style.display = "block";
   
-  // Show success message
   setTimeout(() => {
     successMessage.style.display = "block";
   }, 500);
   
-  // Create confetti
   createConfetti();
 }
 
@@ -240,7 +236,6 @@ function moveButton() {
   const noBtn = document.getElementById("noBtn");
   noButtonClicks++;
   
-  // Random position
   const randomX = Math.random() * (window.innerWidth - 100);
   const randomY = Math.random() * (window.innerHeight - 100);
   
@@ -248,21 +243,19 @@ function moveButton() {
   noBtn.style.left = randomX + "px";
   noBtn.style.top = randomY + "px";
   
-  // Funny messages
   const messages = [
-    "Are you sure? 🥺",
-    "Really? 😭",
-    "Think again! 💭",
-    "You sure about that? 😞",
-    "Come on! 🙏",
-    "Last chance! 💕"
+    "Jsi si jistá? 🥺",
+    "Opravdu? 😭",
+    "Zvaž to znovu! 💭",
+    "Jsi si tím jistá? 😞",
+    "No tak! 🙏",
+    "Poslední šance! 💕"
   ];
   
   if (noButtonClicks <= messages.length) {
     alert(messages[noButtonClicks - 1]);
   } else {
-    // After enough clicks, make it easier to click YES
-    alert("Just click YES already! 😄💕");
+    alert("Klikni na ANO už! 😄💕");
   }
 }
 
@@ -284,7 +277,6 @@ function createConfetti() {
   }
 }
 
-// Add CSS animation for confetti falling
 const style = document.createElement('style');
 style.textContent = `
   @keyframes fall {
@@ -298,4 +290,4 @@ document.head.appendChild(style);
 </script>
 
 </body>
-</html>
+</html>     
