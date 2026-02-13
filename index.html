@@ -48,15 +48,9 @@ h1 {
 }
 
 @keyframes heartbeat {
-  0%, 100% {
-    transform: scale(1);
-  }
-  25% {
-    transform: scale(1.1);
-  }
-  50% {
-    transform: scale(1);
-  }
+  0%, 100% { transform: scale(1); }
+  25% { transform: scale(1.1); }
+  50% { transform: scale(1); }
 }
 
 .button-container {
@@ -88,6 +82,7 @@ button:hover {
   color: white;
   padding: 15px 40px;
   font-size: 20px;
+  transition: transform 0.3s ease; /* Smooth growing */
 }
 
 .yes:hover {
@@ -97,7 +92,6 @@ button:hover {
 .no {
   background-color: #ccc;
   color: #666;
-  transition: all 0.3s ease;
 }
 
 .no:hover {
@@ -117,14 +111,8 @@ button:hover {
 }
 
 @keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 #letter p {
@@ -155,37 +143,15 @@ button:hover {
 }
 
 @keyframes bounce {
-  0% {
-    opacity: 0;
-    transform: scale(0.3) translateY(20px);
-  }
-  50% {
-    transform: scale(1.1);
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1) translateY(0);
-  }
+  0% { opacity: 0; transform: scale(0.3) translateY(20px); }
+  50% { transform: scale(1.1); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
 }
 
-.no-moves {
-  position: relative;
-}
-
-/* Responsive */
 @media (max-width: 600px) {
-  .container {
-    padding: 40px 20px;
-  }
-  
-  h1 {
-    font-size: 1.8em;
-  }
-  
-  button {
-    padding: 12px 25px;
-    font-size: 16px;
-  }
+  .container { padding: 40px 20px; }
+  h1 { font-size: 1.8em; }
+  button { padding: 12px 25px; font-size: 16px; }
 }
 </style>
 </head>
@@ -207,9 +173,9 @@ button:hover {
     <p>Ahoj Charlotte,</p>
     <p>dnes je Valentýn a říkal jsem ti, že něco připravuju, tak tady to je.</p>
     <p>Když jsme si začali psát, nic jsem od toho nečekal. Ale postupem času se něco změnilo. Čím víc jsme si povídali, tím víc mi na tobě začalo záležet.</p>
-    <p>Opravdu si vážím momentů, které jsme spolu měli. Tvého hlasu, tvého smíchu, toho, jak se staráš. Moje sociální baterka se většinou vybije docela rychle, ale s tebou ne. I když j[...]  
-    <p>Nevím přesně, kam to povede, ale vím, že od té doby, co si píšu s tebou, je můj život světlejší. A tvoje přítomnost v mém životě mě upřímně motivuje být lepším člověk[...]  
-    <p>Doufám, že se mnou cítíš to samé.</p>
+    <p>Opravdu si vážím momentů, které jsme spolu měli. Tvého hlasu, tvého smíchu, toho, jak se staráš. Moje sociální baterka se většinou vybije docela rychle, ale s tebou ne. I když jsem unavený, s tebou si vždycky rád povídám dál.</p>
+    <p>Nevím přesně, kam to povede, ale vím, že od té doby, co si píšu s tebou, je můj život světlejší. A tvoje přítomnost v mém životě mě upřímně motivuje být lepším člověkem. Ne kvůli povinnosti — ale protože chci.</p>
+    <p>Takže dnes se tě chci zeptat jednoduše… budeš moje Valentýnka? 🤍</p>
   </div>
 </div>
 
@@ -221,29 +187,33 @@ function showLetter() {
   const successMessage = document.getElementById("successMessage");
   const buttonContainer = document.querySelector(".button-container");
   const heading = document.querySelector("h1");
-  
+
   heading.style.display = "none";
   buttonContainer.style.display = "none";
   letter.style.display = "block";
-  
+
   setTimeout(() => {
     successMessage.style.display = "block";
   }, 500);
-  
+
   createConfetti();
 }
 
 function moveButton() {
   const noBtn = document.getElementById("noBtn");
   noButtonClicks++;
-  
+
+  // 🔥 YES button grows each time NO is clicked
+  const yesBtn = document.querySelector(".yes");
+  yesBtn.style.transform = `scale(${1 + noButtonClicks * 0.1})`;
+
   const randomX = Math.random() * (window.innerWidth - 100);
   const randomY = Math.random() * (window.innerHeight - 100);
-  
+
   noBtn.style.position = "fixed";
   noBtn.style.left = randomX + "px";
   noBtn.style.top = randomY + "px";
-  
+
   const messages = [
     "Are you sure?",
     "Really? 😭",
@@ -252,18 +222,18 @@ function moveButton() {
     "Come on! 🙏",
     "I'll do anything just click yes"
   ];
-  
+
   if (noButtonClicks <= messages.length) {
     alert(messages[noButtonClicks - 1]);
   } else {
-    alert("I'll be a goodboy 😔 click on yes");
+    alert("I'll be a good boy 😔 click on yes");
   }
 }
 
 function createConfetti() {
   const colors = ['#ff4d88', '#ff69b4', '#ffb6c1', '#ffc0cb', '#ff1493', '#fff'];
   const confettiPieces = 50;
-  
+
   for (let i = 0; i < confettiPieces; i++) {
     setTimeout(() => {
       const confetti = document.createElement('div');
@@ -272,7 +242,7 @@ function createConfetti() {
       confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
       confetti.style.animation = `fall ${2 + Math.random() * 1}s linear`;
       document.body.appendChild(confetti);
-      
+
       setTimeout(() => confetti.remove(), 3000);
     }, i * 30);
   }
