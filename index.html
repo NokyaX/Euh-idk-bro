@@ -274,8 +274,13 @@
         fixedActivated = true;
       }
 
-      const randomX = Math.random() * (window.innerWidth - noBtn.offsetWidth);
-      const randomY = Math.random() * (window.innerHeight - noBtn.offsetHeight);
+      const isMobile = window.innerWidth <= 600;
+
+      const maxMoveX = isMobile ? 120 : window.innerWidth - noBtn.offsetWidth;
+      const maxMoveY = isMobile ? 120 : window.innerHeight - noBtn.offsetHeight;
+
+      const randomX = Math.random() * maxMoveX;
+      const randomY = Math.random() * maxMoveY;
 
       noBtn.style.left = randomX + "px";
       noBtn.style.top = randomY + "px";
